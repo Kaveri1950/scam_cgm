@@ -286,7 +286,11 @@ def IntegrateFlowEquations(Mdot,T0,rho0,potential,cooling,metallicity,isInward,R
         M = (v/cs2**0.5).to('')
 
         vc2 = potential.vc(R)**2
-        Z = metallicity.Z(R)[0]
+        Z_array = metallicity.Z(R)
+        if isinstance(Z_array, un.Quantity) and Z_array.isscalar:
+            Z = Z_array  # Use scalar value directly
+        else:
+            Z = Z_array[0]  # Use the first element if it's an array
         
         if R_circ!=None:
             vc2 *= (1-(R_circ/R)**2)
