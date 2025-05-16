@@ -2,7 +2,7 @@
 Module for providing metallicity to the cgm_model_interface module
 """
 
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 import numpy as np
 
 class Uniform_Metallicity(CMI.Metallicity_profile):

@@ -2,7 +2,7 @@
 Module for accessing isentropic model
 """
 
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 from astropy import units as un, constants as cons
 import numpy as np
 from scipy.integrate import odeint, quad

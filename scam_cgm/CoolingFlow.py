@@ -6,7 +6,7 @@ import scipy, scipy.integrate
 from numpy import log as ln, log10 as log, e, pi, arange, zeros
 from astropy import units as un, constants as cons
 
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 
 mu = 0.62    #mean molecular weight
 X = 0.75     #hydrogen mass fraction

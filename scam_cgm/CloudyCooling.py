@@ -4,7 +4,7 @@ Module for providing gas cooling function using Cloudy tables
 
 CoolingTableDir = 'CoolingTables/'
 CoolingTableDir_Wiersma = 'CoolingTables/Wiersma09/'
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 import pickle
 import glob,h5py
 import scipy, numpy as np

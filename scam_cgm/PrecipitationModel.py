@@ -2,7 +2,7 @@
 Module for accessing precipitation model
 """
 
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 from astropy.cosmology import Planck15 as cosmo
 from astropy import units as un, constants as cons
 import numpy as np

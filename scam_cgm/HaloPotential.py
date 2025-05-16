@@ -7,7 +7,7 @@ import scipy
 from numpy import log as ln, log10 as log, e, pi, arange, zeros
 from astropy import units as un, constants as cons
 from astropy.cosmology import Planck15 as cosmo
-import cgm_model_interface as CMI
+from scam_cgm import cgm_model_interface as CMI
 
 h0=cosmo.H0.value/100
 X = 0.75     #hydrogen mass fraction
