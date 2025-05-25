@@ -1,0 +1,1 @@
+recursive-include scam_cgm/CoolingTables *.pkl

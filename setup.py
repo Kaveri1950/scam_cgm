@@ -1,7 +1,6 @@
 from setuptools import setup, find_packages
 import pathlib
 
-
 here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
@@ -14,7 +13,8 @@ setup(
     author='Kaveri',  
     author_email='neelikaveri3@gmail.com',
     url='https://github.com/Kaveri1950/scam_cgm',
-    packages=find_packages(include=['scam_cgm*']),  
+    packages=find_packages(include=['scam_cgm*']),
+    include_package_data=True,            
     install_requires=[
         'numpy>=1.21.0', 
         'matplotlib>=3.5.0',
