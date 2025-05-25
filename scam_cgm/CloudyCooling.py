@@ -2,8 +2,10 @@
 Module for providing gas cooling function using Cloudy tables
 """
 
-CoolingTableDir = 'CoolingTables/'
-CoolingTableDir_Wiersma = 'CoolingTables/Wiersma09/'
+from pathlib import Path
+package_dir = Path(__file__).parent
+CoolingTableDir = str(package_dir / 'CoolingTables/cool_eff_CIE/')
+CoolingTableDir_Wiersma = str(package_dir / 'CoolingTables/Wiersma09/')
 from scam_cgm import cgm_model_interface as CMI
 import pickle
 import glob,h5py
