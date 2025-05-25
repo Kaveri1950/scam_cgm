@@ -31,15 +31,11 @@ class CIE(CMI.Cooling):
         )
 
     def LAMBDA(self, T, Z, nH=None):
-        """
-        T: gas temperature in kelvin
-        Z: metallicity
-        returns cooling function in the units erg cm^3/s 
-        """
+        """Returns cooling function in erg cm³/s"""
         return self.f_Cooling((T, Z)) * un.erg * un.cm**3 / un.s
 
     def f_dlnLambda_dlnT(self, T, Z, nH=None):
-        """logarithmic derivative of cooling function with respect to T"""
+        """Logarithmic derivative of cooling function with respect to T"""
         vals = log(self.LAMBDA(self.logTs, Z))
         dlnLambda_dlnTArr = np.gradient(vals, self.logTs)
         dlnLambda_dlnT_interpolation = interpolate.RegularGridInterpolator(
@@ -48,7 +44,7 @@ class CIE(CMI.Cooling):
         return dlnLambda_dlnT_interpolation(log(T.to('K').value))
 
     def f_dlnLambda_dlnrho(self, T, Z, nH=None):
-        """logarithmic derivative of cooling function with respect to rho"""
+        """Logarithmic derivative with respect to rho (returns 0 for CIE)"""
         return 0
 
 
@@ -57,26 +53,26 @@ class Constant_Cooling(CMI.Cooling):
         self._LAMBDA = LAMBDA        
 
     def LAMBDA(self, T=None, Z=None, nH=None):
-        """cooling function"""
         return self._LAMBDA
 
     def f_dlnLambda_dlnT(self, T=None, Z=None, nH=None):
-        """logarithmic derivative of cooling function with respect to T"""
         return 0
 
     def f_dlnLambda_dlnrho(self, T=None, Z=None, nH=None):
-        """logarithmic derivative of cooling function with respect to rho"""
         return 0
 
 
 class Wiersma_Cooling(CMI.Cooling):
     """
-    creates Wiersma+09 cooling function for given metallicity and redshift
+    Creates Wiersma+09 cooling function for given metallicity and redshift
     """
     def __init__(self, Z2Zsun, z):
-        fns = sorted(Path(CoolingTableDir_Wiersma).glob('z_?.???.hdf5'))
+        fns = list(Path(CoolingTableDir_Wiersma).glob('z_?.???.hdf5'))
         zs = np.array([float(fn.stem[2:]) for fn in fns])
-        fn = fns[zs.argsort()][searchsortedclosest(sorted(zs), z)]
+        sorted_indices = np.argsort(zs)
+        zs_sorted = zs[sorted_indices]
+        fns_sorted = [fns[i] for i in sorted_indices]
+        fn = fns_sorted[searchsortedclosest(zs_sorted, z)]
 
         f = h5py.File(fn, 'r')
 
@@ -96,11 +92,11 @@ class Wiersma_Cooling(CMI.Cooling):
             bounds_error=False, fill_value=None
         )
 
-        # calculate gradients of cooling function
-        X, Y = np.meshgrid(Tbins, nHbins, copy=False)
+        # compute gradients of the cooling function
+        Xg, Yg = np.meshgrid(Tbins, nHbins, copy=False)
         dlogT = np.diff(log(Tbins))[0] 
         dlogn = np.diff(log(nHbins))[0] 
-        vals = log(self.LAMBDA(X * un.K, Z2Zsun, Y * un.cm**-3).value)
+        vals = log(self.LAMBDA(Xg * un.K, Z2Zsun, Yg * un.cm**-3).value)
         dlnLambda_dlnrhoArr, dlnLambda_dlnTArr = np.gradient(vals, dlogn, dlogT)
 
         self.dlnLambda_dlnT_interpolation = interpolate.RegularGridInterpolator(
@@ -113,19 +109,17 @@ class Wiersma_Cooling(CMI.Cooling):
         )
 
     def LAMBDA(self, T, Z=None, nH=None):
-        """cooling function"""
+        """Cooling function"""
         return self.f_Cooling((log(T.to('K').value), log(nH.to('cm**-3').value))) * un.erg * un.cm**3 / un.s
 
     def tcool(self, T, Z=None, nH=None):
-        """cooling time"""
+        """Cooling time"""
         return 3.5 * cons.k_B * T / (nH * self.LAMBDA(T, Z, nH))
 
     def f_dlnLambda_dlnT(self, T, Z=None, nH=None):         
-        """logarithmic derivative of cooling function with respect to T"""
         return self.dlnLambda_dlnT_interpolation((log(T.to('K').value), log(nH.to('cm**-3').value)))
 
     def f_dlnLambda_dlnrho(self, T, Z=None, nH=None):
-        """logarithmic derivative of cooling function with respect to rho"""
         return self.dlnLambda_dlnrho_interpolation((log(T.to('K').value), log(nH.to('cm**-3').value)))
 
 
