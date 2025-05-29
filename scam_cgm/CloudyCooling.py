@@ -23,9 +23,12 @@ class CIE(CMI.Cooling):
     Cooling function for the collisional ionisation equilibrium
     """    
     def __init__(self):
+        ####
+        #updated part of code
         CoolingTabPath = CoolingTableDir / 'cool_eff_CIE.pkl'
         with open(CoolingTabPath, 'rb') as f:
             CoolingTab = pickle.load(f)
+        ####
         self.logTs = log(CoolingTab['Temperature'])
         self.f_Cooling = interpolate.RegularGridInterpolator(
             (10.**self.logTs, CoolingTab['Metallicity']),
