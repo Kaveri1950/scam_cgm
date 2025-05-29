@@ -16,9 +16,13 @@ setup(
     packages=find_packages(include=['scam_cgm*']),
     include_package_data=True,            
     install_requires=[
-        'numpy>=1.21.0', 
+        'numpy>=1.21.0',
         'matplotlib>=3.5.0',
+        'astropy',
+        'h5py',
+        'scipy',
     ],
+
     python_requires='>=3.8', 
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -36,4 +40,5 @@ setup(
         'Bug Reports': 'https://github.com/Kaveri1950/scam_cgm/issues',
         'Source': 'https://github.com/Kaveri1950/scam_cgm',
     },
+    license='MIT',
 )
